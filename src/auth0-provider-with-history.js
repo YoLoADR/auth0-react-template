@@ -1,0 +1,32 @@
+// un Auth0ProviderWithHistorycomposant, qui utilise la composition pour rendre les Hooks React Router disponibles pour Auth0Provider
+import React from "react";
+import { useHistory } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
+
+const Auth0ProviderWithHistory = ({ children }) => {
+// Vous avez besoin du SDK Auth0 React pour vous connecter à l'application Auth0 appropriée pour traiter l'authentification. 
+// En tant que tel, vous devez utiliser le domaine Auth0 et l'ID client pour configurer le Auth0Provider.
+  const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+//Vous utilisez le useHistory()crochet pour obtenir l' historyobjet à partir de React Router. 
+  const history = useHistory();
+
+// Vous utilisez la onRedirectCallback()méthode pour gérer l'événement où Auth0 redirige vos utilisateurs de la page de connexion universelle Auth0 vers votre application React.
+  const onRedirectCallback = (appState) => {
+      // Vous utilisez la history.push()méthode pour ramener les utilisateurs à l'itinéraire auquel ils avaient l'intention d'accéder avant l'authentification.
+    history.push(appState?.returnTo || window.location.pathname);
+  };
+
+  return (
+    <Auth0Provider
+      domain={domain}
+      clientId={clientId}
+      redirectUri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+    >
+      {children}
+    </Auth0Provider>
+  );
+};
+//Envelopper n'importe quelle arborescence de composants avec Auth0ProviderWithHistorylui donnera accès au Auth0Context.
+export default Auth0ProviderWithHistory;
