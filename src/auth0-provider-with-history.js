@@ -8,6 +8,8 @@ const Auth0ProviderWithHistory = ({ children }) => {
 // En tant que tel, vous devez utiliser le domaine Auth0 et l'ID client pour configurer le Auth0Provider.
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
   const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+  const audience = process.env.REACT_APP_AUDIENCE;
+  
 //Vous utilisez le useHistory()crochet pour obtenir l' historyobjet à partir de React Router. 
   const history = useHistory();
 
@@ -23,6 +25,8 @@ const Auth0ProviderWithHistory = ({ children }) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      // Pourquoi la valeur Audh0 Audience est-elle la même pour les deux applications? Auth0 utilise la valeur de l' audienceaccessoire pour déterminer le serveur de ressources (API) auquel l'utilisateur autorise votre application React à accéder.
+      audience={audience}
     >
       {children}
     </Auth0Provider>
